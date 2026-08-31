@@ -1,0 +1,64 @@
+{
+  "$schemaNote": "Mapa de capacidades legivel por maquina. Ver capacidades.md para a documentacao completa e schema descrito por campo.",
+  "mapVersion": "1.0.0",
+  "lastUpdated": "2026-08-31",
+  "project": {
+    "name": "from-scratch-task-manager",
+    "codeRepo": "from-scratch",
+    "mapRepo": "project-map",
+    "scopeSize": "Small-Medium",
+    "description": "Gerenciador de tarefas CRUD single-user, FastAPI + MongoDB + React"
+  },
+  "stack": {
+    "backend": { "language": "Python", "framework": "FastAPI", "server": "Uvicorn", "orm": "PyMongo (driver direto, sem ORM)" },
+    "frontend": { "language": "JavaScript", "framework": "React", "build": "Vite", "httpClient": "axios" },
+    "database": { "engine": "MongoDB", "name": "tasks_db", "collections": ["tasks"] }
+  },
+  "entities": [
+    {
+      "name": "Task",
+      "source": "backend/models.py",
+      "fields": [
+        { "name": "_id", "type": "ObjectId", "required": true, "notes": "gerado pelo MongoDB, exposto como string" },
+        { "name": "title", "type": "string", "required": true, "constraints": "minLength=1, maxLength=200" },
+        { "name": "description", "type": "string|null", "required": false, "constraints": "maxLength=1000" },
+        { "name": "completed", "type": "boolean", "required": false, "default": false },
+        { "name": "created_at", "type": "datetime", "required": true, "notes": "servidor, UTC" },
+        { "name": "updated_at", "type": "datetime", "required": true, "notes": "servidor, UTC" }
+      ]
+    }
+  ],
+  "endpoints": [
+    { "method": "GET", "path": "/", "reqId": "REQ-006", "auth": false, "handler": "backend/main.py::root", "responses": [200] },
+    { "method": "GET", "path": "/health", "reqId": "REQ-006", "auth": false, "handler": "backend/main.py::health", "responses": [200, 503] },
+    { "method": "POST", "path": "/api/tasks", "reqId": "REQ-001", "auth": false, "handler": "backend/main.py::create_task", "requestSchema": "TaskCreate", "responseSchema": "Task", "responses": [201, 422] },
+    { "method": "GET", "path": "/api/tasks", "reqId": "REQ-002", "auth": false, "handler": "backend/main.py::list_tasks", "query": ["skip", "limit"], "responseSchema": "Task[]", "responses": [200] },
+    { "method": "GET", "path": "/api/tasks/{task_id}", "reqId": "REQ-003", "auth": false, "handler": "backend/main.py::get_task", "responseSchema": "Task", "responses": [200, 400, 404] },
+    { "method": "PATCH", "path": "/api/tasks/{task_id}", "reqId": "REQ-004", "auth": false, "handler": "backend/main.py::update_task", "requestSchema": "TaskUpdate", "responseSchema": "Task", "responses": [200, 400, 404] },
+    { "method": "DELETE", "path": "/api/tasks/{task_id}", "reqId": "REQ-005", "auth": false, "handler": "backend/main.py::delete_task", "responses": [204, 400, 404] },
+    { "method": "DELETE", "path": "/api/tasks", "reqId": "REQ-005", "auth": false, "handler": "backend/main.py::delete_all_tasks", "responses": [204], "risk": "R-001" }
+  ],
+  "features": [
+    { "id": "F-001", "name": "Criar tarefa", "reqId": "REQ-001", "status": "done", "layer": ["backend", "frontend"] },
+    { "id": "F-002", "name": "Listar tarefas", "reqId": "REQ-002", "status": "done", "layer": ["backend", "frontend"] },
+    { "id": "F-003", "name": "Obter tarefa por ID", "reqId": "REQ-003", "status": "done", "layer": ["backend"] },
+    { "id": "F-004", "name": "Concluir/editar tarefa", "reqId": "REQ-004", "status": "done", "layer": ["backend", "frontend"] },
+    { "id": "F-005", "name": "Excluir tarefa", "reqId": "REQ-005", "status": "done", "layer": ["backend", "frontend"] },
+    { "id": "F-006", "name": "Health check", "reqId": "REQ-006", "status": "done", "layer": ["backend"] },
+    { "id": "F-007", "name": "Interface web de tarefas", "reqId": "REQ-007", "status": "done", "layer": ["frontend"] },
+    { "id": "F-008", "name": "Autenticação/autorização", "reqId": null, "status": "not-started", "layer": ["backend", "frontend"] },
+    { "id": "F-009", "name": "Testes automatizados", "reqId": null, "status": "not-started", "layer": ["backend", "frontend"] },
+    { "id": "F-010", "name": "Filtros/prazos/categorias", "reqId": null, "status": "not-started", "layer": ["backend", "frontend"] }
+  ],
+  "decisions": ["AD-001", "AD-002", "AD-003", "AD-004", "AD-005"],
+  "risks": ["R-001", "R-002", "R-003", "R-004", "R-005"],
+  "documents": {
+    "context": "contexto.md",
+    "requirements": "requisitos.md",
+    "architecture": "arquitetura.md",
+    "dataModel": "modelo-de-dados.md",
+    "flows": "fluxos.md",
+    "decisions": "decisoes.md",
+    "capabilities": "capacidades.md"
+  }
+}
