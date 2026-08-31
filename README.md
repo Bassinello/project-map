@@ -18,10 +18,12 @@ project-map/
 ├── arquitetura.md
 ├── fluxos.md
 ├── modelo-de-dados.md
-└── decisoes.md
+├── decisoes.md
+├── capacidades.md         # mapa-mestre de capacidades (leitura humana)
+└── capabilities.json      # mesmo mapa, estruturado para agentes/ferramentas
 ```
 
-Comece pelo contexto e pelos requisitos do MVP. Atualize arquitetura, fluxos e decisões quando o comportamento ou a estrutura do projeto mudar.
+Comece pelo contexto e pelos requisitos do MVP. Atualize arquitetura, fluxos e decisões quando o comportamento ou a estrutura do projeto mudar. **Comece a leitura por [capacidades.md](capacidades.md)** para uma visão geral rápida do que o sistema faz, antes de aprofundar em qualquer outro documento.
 
 As skills específicas devem ser colocadas em `.github/skills/<nome-da-skill>/SKILL.md`. O plano geral fica em [plano-do-projeto.md](plano-do-projeto.md).
 
